@@ -1,3 +1,8 @@
+%% Functions needed to run this code:
+% 1) parse_args
+% 2) demodulateTrial_TP
+% 3) waveletDetrending
+% 
 function TE = getPhotoData_withTE(TE,  varargin)
 
 defaults = {...
