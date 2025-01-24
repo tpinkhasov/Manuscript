@@ -9,6 +9,7 @@ defaults = {...
 [s, ~] = parse_args(defaults, varargin{:});
 
 loopBy = unique(TE.(s.plotBy)(selectTrials));
+colors = slanCM('cool',length(loopBy));
 figure()
 for f = 1:length(loopBy)
     if ischar(loopBy{f}) == 1
@@ -19,7 +20,7 @@ for f = 1:length(loopBy)
             licks = lickStruct.(s.lickVar)(trials)';
         end
         [d,xi] = ksdensity(licks, 'BandWidth', 0.12, 'Function','pdf');
-        plot(xi,(d));
+        plot(xi,(d), 'Color', [colors(f,:)], 'LineWidth', 2);;
         hold on
     end
 end
