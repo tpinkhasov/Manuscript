@@ -1,4 +1,4 @@
-function plot_lickAutocovariance(TE, animals)
+function [allLickTimes, fs] = plot_lickAutocovariance(TE, animals, timeWin)
 
 %% plot_lickAutocovariance
 % Plots color map of premature lick autocovariances for each animal
@@ -11,7 +11,7 @@ for a = 1:length(animals)
     licks = cellfun(@(x, z) x-z(1,1), TE.lickInfo_tone.realLicks(trials), TE.SoundCue(trials), 'UniformOutput', false); %Get time of premature licks from tone onset for each trial
 
     %Generate matrix of time series with premature lick events
-    timeWin = 0.01; %desired window of time in s between time bins
+   % timeWin = 0.01; %desired window of time in s between time bins
     bins = [0:timeWin:30]; %Generate time bins between 0 and 30s with specified timeWin
     fs = 1/timeWin; %sample rate
     lickTimes = zeros(length(licks), length(bins));
@@ -24,6 +24,7 @@ for a = 1:length(animals)
         end
     end
 
+    allLickTimes(a,:) = sum(lickTimes);
     %Get autocovariance of the summation of lick times (ie, the number of
     %licks that occur per time bin)
     tCov = 10; %What window of time in seconds do you want to focus on?
@@ -43,3 +44,4 @@ for a = 1:length(animals)
 end
 set(gca,'LineWidth',1,'TickDir','out', 'box', 'off', 'ytick', [], 'xtick', [-tCov:2:tCov]);
 xlabel('Lag (s)')
+end

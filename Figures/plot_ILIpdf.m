@@ -4,6 +4,7 @@ function plot_ILIpdf(TE, lickStruct, selectTrials, varargin)
 
 defaults = {...
     'plotBy', 'animalID';...%do you want to plot the pdf for each animal vs trial type, etc.
+    'bandWidth', 0.12;...
     'lickVar', 'realInterLicks';,...%do you want to plot pdf for interlick intervals, time to first lick, etc.
     };
 [s, ~] = parse_args(defaults, varargin{:});
@@ -19,7 +20,7 @@ for f = 1:length(loopBy)
         else
             licks = lickStruct.(s.lickVar)(trials)';
         end
-        [d,xi] = ksdensity(licks, 'BandWidth', 0.12, 'Function','pdf');
+        [d,xi] = ksdensity(licks, 'BandWidth', s.bandWidth, 'Function','pdf');
         plot(xi,(d), 'Color', [colors(f,:)], 'LineWidth', 2);;
         hold on
     end
