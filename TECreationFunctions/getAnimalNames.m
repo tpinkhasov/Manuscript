@@ -1,8 +1,6 @@
-function animalID = getAnimalNames(TE)
-
+%% Extract animal names from session filename per trial
 %Assumes you have filenames saved in struct
-filenames = unique(TE.filename);
-
-idx = cellfun(@(x) strfind(x,'LW'), filenames);
-animalID = cellfun(@(x,y) x(1:y-2), filenames, num2cell(idx), 'UniformOutput', false);
+function animalID = getAnimalNames(TE)
+idx = cellfun(@(x) strfind(x,'LW'), TE.filename);
+animalID = cellfun(@(x,y) x(1:y-2), TE.filename, num2cell(idx), 'UniformOutput', false);
 end
