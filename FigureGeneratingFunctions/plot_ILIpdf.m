@@ -27,9 +27,16 @@ for f = 1:length(loopBy)
     plot(xi,(d), 'Color', [colors(f,:)], 'LineWidth', 2);;
     hold on
 end
-end
 
 set(gca,'LineWidth',1,'TickDir','out', 'box', 'off', 'FontSize', 15);
 xlabel('Time (s)')
 ylabel('Probability density')
-legend(loopBy)
+
+%set legend
+if iscell(loopBy(f)) == 1 & ischar(loopBy{f}) == 1
+    legend(loopBy)
+elseif isa(loopBy,'double') == 1
+    legend(strcat(s.plotBy, num2str(loopBy)))
+end
+
+end
