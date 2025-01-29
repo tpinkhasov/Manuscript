@@ -1,4 +1,5 @@
-%% requires the use of getCorrectedInterLicks to generate the correct data structure
+%% plot_ILIpdf
+% requires the use of getCorrectedInterLicks to generate the correct data structure
 
 function plot_ILIpdf(TE, lickStruct, selectTrials, varargin)
 
