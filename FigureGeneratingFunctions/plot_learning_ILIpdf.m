@@ -1,6 +1,6 @@
 
 
-function plot_learning_ILIpdf(TE, varargin)
+function stats = plot_learning_ILIpdf(TE, varargin)
 
 defaults = {...
     'maxSessions',3;...
@@ -29,13 +29,26 @@ end
 figure()
 colors = slanCM('cool',nSessions);
 for sesh = 1:nSessions
-    shadedErrorBar(nanmean(pdfPerMouse.x{sesh}), nanmean(pdfPerMouse.y{sesh}), sem(pdfPerMouse.y{sesh}), {'color', [colors(sesh,:)]}); hold on
-   % lgd(sesh) = legend(strcat('session #', num2str(sesh)), 'TextColor', colors(sesh,:));
+    figData(sesh) = shadedErrorBar(nanmean(pdfPerMouse.x{sesh}), nanmean(pdfPerMouse.y{sesh}), sem(pdfPerMouse.y{sesh}), {'color', [colors(sesh,:)]}); hold on
 end
 set(gca,'LineWidth',1,'TickDir','out', 'box', 'off', 'FontSize', 15);
 xlabel('Time (s)')
 ylabel('Probability density')
-%lgd = legend(strcat('session #', num2str([1:nSessions]')));
 
+%statistics by comparing pdf averaged across animals from different
+%training sessions using 2 sample kolmogorov-smirnov test
+combos = combinations([1:nSessions], [1:nSessions]);
+repeats = combos.Var1 == combos.Var2;
+testCombos = table2array(combos(repeats==0,:));
+[~, uIdx] = unique(sum(testCombos,2));
+testCombos = testCombos(uIdx,:);
+
+for f = 1:length(testCombos)
+    stats(f).comparison = [(strcat('session#', num2str(testCombos(f,1)))), (strcat('session#', num2str(testCombos(f,2))))];
+    [h, p, k] = kstest2(figData(testCombos(f,1)).mainLine.YData,figData(testCombos(f,2)).mainLine.YData);
+    stats(f).h = h;
+    stats(f).p = p;
+    stats(f).k = k;
+end
 
 end
