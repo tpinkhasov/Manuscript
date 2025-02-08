@@ -33,15 +33,32 @@ else
     groupNames = num2cell(num2str(groups));
 end
 
-figure()
-bar(nanmean(allPercentFails))
+% load colors
+load("C:\Users\Kepecs\MATLAB\Projects\DAManuscript\FigureGeneratingFunctions\BarPlotColors.mat")
+
+fig = figure();
+barFigData = bar(nanmean(allPercentFails), 'EdgeColor', 'none', 'FaceColor', 'flat', 'FaceAlpha', 0.8, 'BarWidth', 1);
 hold on
-plot(allPercentFails', 'k')
+lineFigData = plot(allPercentFails', 'k', 'LineWidth', 0.8, 'Color', [0 0 0 0.45]);
+
+% use colors depending on task type
+if contains(TE.filename{1}, 'LW')
+    barFigData.CData(1,:) = BarPlotColors.LWTask.Big;
+    barFigData.CData(2,:) = BarPlotColors.LWTask.Small;
+    barFigData.CData(3,:) = BarPlotColors.LWTask.None;
+else
+    barFigData.CData(1,:) = BarPlotColors.ControlTask.Big;
+    barFigData.CData(2,:) = BarPlotColors.ControlTask.Small;
+    barFigData.CData(3,:) = BarPlotColors.ControlTask.None;
+end
+
+xlim([0.35 3.65])
 
 xlabel(s.splitBy)
 xticklabels(groupNames)
 ylabel('% fail trials')
-set(gca,'LineWidth',1,'TickDir','out', 'box', 'off', 'FontSize', 15);
+set(gca, 'FontName', 'Arial', 'TickLength', [0.04 0.04], 'LineWidth', 0.4, 'TickDir','out', 'box', 'off', 'FontSize', 20);
+daspect([1 3 1]);
 
 %Statistics
 dataTable = table(linePer,allPercentFails(:,1), allPercentFails(:,2), allPercentFails(:,3));

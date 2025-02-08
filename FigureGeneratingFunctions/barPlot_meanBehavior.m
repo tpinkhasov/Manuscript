@@ -1,33 +1,41 @@
-function allPercentPatient = barPlot_percentPatientTrials_perAnimal(TE, selectTrials, varargin)
+%% barPlot_meanBehavior
+% plots the mean specified behavioral measure
+
+function allBeh = barPlot_meanBehavior(TE, selectTrials, varargin)
 
 defaults = {...
-    'linePer', 'animalID';...%do you want to plot the line for each animal vs trial type, etc.
-    'splitBy', 'TrialTypes';...
-    'openFigure','on';...
+    'behVar', 'CS2RT';... %what behavioral variable do you want the avergae of?
+    'linePer', 'animalID';...%do you want to plot the line for each animal
+    'splitBy', 'TrialTypes';... %What groups do you want to compare
     };
 [s, ~] = parse_args(defaults, varargin{:});
 
-linePer = unique(TE.(s.linePer));
+linePer = unique(TE.(s.linePer)); 
 nLines = length(linePer);
 groups = unique(TE.(s.splitBy));
 nGroups = length(groups);
 
-allPercentPatient = NaN(nLines, nGroups);
+allBeh = NaN(nLines, nGroups);
+
+behData = TE.(s.behVar);
 
 for n = 1:nLines
-    trials = selectTrials & contains(TE.(s.linePer),linePer{n});
-    allPercentPatient(n,:) = get_percentPatientTrials(TE, trials, TE.(s.splitBy));
+    for g = 1:nGroups
+        trials = selectTrials & contains(TE.(s.linePer),linePer{n}) & TE.(s.splitBy)==groups(g);
+        allBeh(n,g) = nanmean(behData(trials));
+    end
 end
 
+% If you are splitting by trial type, change the order of data so that column 1 is big reward, column 2 is
+% small, and 3 is none
 if contains(s.splitBy, 'TrialTypes')
-    bigs = allPercentPatient(:,2);
-    smalls = allPercentPatient(:,1);
+    bigs = allBeh(:,2);
+    smalls = allBeh(:,1);
 
-    allPercentPatient(:,1) = bigs;
-    allPercentPatient(:,2) = smalls;
+    allBeh(:,1) = bigs;
+    allBeh(:,2) = smalls;
 
     groupNames = [{'Big'}, {'Small'}, {'None'}];
-legend
 else
     groupNames = num2cell(num2str(groups));
 end
@@ -38,9 +46,9 @@ end
 load("C:\Users\Kepecs\MATLAB\Projects\DAManuscript\FigureGeneratingFunctions\BarPlotColors.mat")
 
 fig = figure();
-barFigData = bar(nanmean(allPercentPatient), 'EdgeColor', 'none', 'FaceColor', 'flat', 'FaceAlpha', 0.8, 'BarWidth', 1);
+barFigData = bar(nanmean(allBeh), 'EdgeColor', 'none', 'FaceColor', 'flat', 'FaceAlpha', 0.8, 'BarWidth', 1);
 hold on
-lineFigData = plot(allPercentPatient', 'k', 'LineWidth', 0.5, 'Color', [0 0 0 0.45]);
+lineFigData = plot(allBeh', 'k', 'LineWidth', 0.5, 'Color', [0 0 0 0.45]);
 
 % use colors depending on task type
 if contains(TE.filename{1}, 'LW')
@@ -55,14 +63,14 @@ end
 
 xlabel(s.splitBy)
 xticklabels(groupNames)
-ylabel('% patient trials')
+ylabel(s.behVar)
 
 xlim([0.35 3.65])
 set(gca, 'FontName', 'Arial', 'TickLength', [0.04 0.04], 'LineWidth', 0.25, 'TickDir','out', 'box', 'off', 'FontSize', 20);
 daspect([1 3.5 1])
 
 %Statistics
-dataTable = table(linePer,allPercentPatient(:,1), allPercentPatient(:,2), allPercentPatient(:,3));
+dataTable = table(linePer,allBeh(:,1), allBeh(:,2), allBeh(:,3));
 dataTable.Properties.VariableNames = ["animal", "big", "small", "none"];
 rm = fitrm(dataTable, 'big-none ~1', WithinModel = 'orthogonalcontrasts');
 stats = ranova(rm, 'WithinModel', [-1 0 1]');
