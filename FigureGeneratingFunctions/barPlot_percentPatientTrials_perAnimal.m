@@ -16,7 +16,7 @@ allPercentPatient = NaN(nLines, nGroups);
 
 for n = 1:nLines
     trials = selectTrials & contains(TE.(s.linePer),linePer{n});
-    allPercentPatient(n,:) = get_percentPatientTrials(TE, trials, TE.(s.splitBy));
+    allPercentPatient(n,:) = get_percentPatientTrials(TE, trials, 'splitBy', s.splitBy);
 end
 
 if contains(s.splitBy, 'TrialTypes')
@@ -38,7 +38,7 @@ end
 load("C:\Users\Kepecs\MATLAB\Projects\DAManuscript\FigureGeneratingFunctions\BarPlotColors.mat")
 
 fig = figure();
-barFigData = bar(nanmean(allPercentPatient), 'EdgeColor', 'none', 'FaceColor', 'flat', 'FaceAlpha', 0.8, 'BarWidth', 1);
+barFigData = bar(nanmean(allPercentPatient), 'FaceColor', 'flat', 'FaceAlpha', 0.8, 'BarWidth', 1);
 hold on
 lineFigData = plot(allPercentPatient', 'k', 'LineWidth', 0.5, 'Color', [0 0 0 0.45]);
 
@@ -59,7 +59,7 @@ ylabel('% patient trials')
 
 xlim([0.35 3.65])
 set(gca, 'FontName', 'Arial', 'TickLength', [0.04 0.04], 'LineWidth', 0.25, 'TickDir','out', 'box', 'off', 'FontSize', 20);
-daspect([1 3.5 1])
+%daspect([1 3.5 1])
 
 %Statistics
 dataTable = table(linePer,allPercentPatient(:,1), allPercentPatient(:,2), allPercentPatient(:,3));

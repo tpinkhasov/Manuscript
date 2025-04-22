@@ -1,5 +1,4 @@
-%% getSessionIndex
-%% Indexes all sessions in a TE struct
+%% getTrialNumber
 
 function trialNumber = getTrialNumber(TE)
 

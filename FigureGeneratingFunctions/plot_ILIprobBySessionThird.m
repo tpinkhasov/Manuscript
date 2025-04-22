@@ -3,7 +3,7 @@
 % Will run linear contrast rm ANOVA analysis
 % Input is TE data struct and "animals" as a list of chars
 
-function plot_ILIprobBySessionThird(TE, animals)
+function stats = plot_ILIprobBySessionThird(TE, animals)
 
 nAnimals = length(animals);
 firstThird_ILI = NaN(length(animals), 1);
@@ -17,16 +17,16 @@ for a = 1:nAnimals
     thirdThird_ILI(a,1) = sum(allLicks>0.5 & allLicks<2)/sum(allLicks<2);
     
     trials = contains(TE.animalID, animals{a}) & TE.satietyState == 0 & TE.sessionThird == 1;
-    allLicks = cell2mat(TE.lickInfo_ITI.realInterLicks(trials)');
+    allLicks = cell2mat(TE.lickInfo_tone.realInterLicks(trials)');
     firstThird_ILI(a,1) = sum(allLicks>0.5)/length(allLicks);    
 
     trials = contains(TE.animalID, animals{a}) & TE.satietyState == 0 & TE.sessionThird == 2;
-    allLicks = cell2mat(TE.lickInfo_Reward.realInterLicks(trials)');
+    allLicks = cell2mat(TE.lickInfo_tone.realInterLicks(trials)');
     secondThird_ILI(a,1) = sum(allLicks>0.5)/length(allLicks);   
 end
 data = [firstThird_ILI, secondThird_ILI, thirdThird_ILI];
 varNames = [{'1st'}, {'2nd'}, {'3rd'}];
-bar([1:3], nanmean(data),'BarWidth', 0.95)
+bar([1:3], nanmean(data),'BarWidth', 1)
 hold on
 plot([1:3], data, 'k')
 set(gca, 'FontName', 'Arial', 'TickLength', [0.04 0.04], 'LineWidth', 0.25, 'TickDir','out', 'box', 'off', 'FontSize', 20);
@@ -44,4 +44,8 @@ fVal = strcat('F(', num2str(stats.DF(1)), ', ', num2str(stats.DF(2)), ') = ', nu
 pVal = strcat('p =', num2str(stats.pValue(1)));
 text(3, 0.35, fVal); hold on
 text(3, 0.3, pVal)
+
+[h(1,1),p(1,1)] = ttest(firstThird_ILI, secondThird_ILI);
+[h(2,1),p(2,1)] = ttest(firstThird_ILI, thirdThird_ILI);
+[h(3,1),p(3,1)] = ttest(thirdThird_ILI, secondThird_ILI);
 end

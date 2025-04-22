@@ -17,7 +17,7 @@ allPercentFails = NaN(nLines, nGroups);
 
 for n = 1:nLines
     trials = selectTrials & contains(TE.(s.linePer),linePer{n});
-    allPercentFails(n,:) = get_percentFailTrials(TE, trials, TE.(s.splitBy));
+    allPercentFails(n,:) = get_percentFailTrials(TE, trials, 'splitBy', s.splitBy);
 end
 
 if contains(s.splitBy, 'TrialTypes')
@@ -37,7 +37,7 @@ end
 load("C:\Users\Kepecs\MATLAB\Projects\DAManuscript\FigureGeneratingFunctions\BarPlotColors.mat")
 
 fig = figure();
-barFigData = bar(nanmean(allPercentFails), 'EdgeColor', 'none', 'FaceColor', 'flat', 'FaceAlpha', 0.8, 'BarWidth', 1);
+barFigData = bar(nanmean(allPercentFails), 'FaceColor', 'flat', 'FaceAlpha', 0.8, 'BarWidth', 1);
 hold on
 lineFigData = plot(allPercentFails', 'k', 'LineWidth', 0.8, 'Color', [0 0 0 0.45]);
 
@@ -58,7 +58,7 @@ xlabel(s.splitBy)
 xticklabels(groupNames)
 ylabel('% fail trials')
 set(gca, 'FontName', 'Arial', 'TickLength', [0.04 0.04], 'LineWidth', 0.4, 'TickDir','out', 'box', 'off', 'FontSize', 20);
-daspect([1 3 1]);
+%daspect([1 3 1]);
 
 %Statistics
 dataTable = table(linePer,allPercentFails(:,1), allPercentFails(:,2), allPercentFails(:,3));

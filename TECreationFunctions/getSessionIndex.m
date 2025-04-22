@@ -1,7 +1,6 @@
 %% getSessionIndex
-%% Indexes all sessions in a TE struct
 
-function trialNumber = getTrialNumber(TE)
+function sessionIndex = getSessionIndex(TE)
 
 uniqueSessions = unique(TE.filename, 'stable'); % get all the unique session names, keep the original order
 nSessions = length(uniqueSessions);

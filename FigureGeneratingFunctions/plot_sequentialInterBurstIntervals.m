@@ -28,7 +28,7 @@ else
     allInterBursts = NaN(nLines, s.nBursts);
 
     for a = 1:nLines
-        if ischar(linePer)
+        if ischar(linePer{1})
             trials = selectTrials & contains(TE.(s.linePer), linePer{a}) & TE.lickInfo_tone.numBursts > s.nBursts;
         elseif isnumeric(linePer)
             trials = selectTrials & TE.(s.linePer) == linePer(a) & TE.lickInfo_tone.numBursts > s.nBursts;

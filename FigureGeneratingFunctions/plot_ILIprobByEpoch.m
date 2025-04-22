@@ -1,4 +1,4 @@
-%% Plot probability of long interlick interval (>0.5s) compared between epochs
+%% Plot probability of long interlick interval (>0.5s) compared between session third
 % Will plot bar graph of average across mice and line plots of each mouse's average
 % Will run linear contrast rm ANOVA analysis
 % Input is TE data struct and "animals" as a list of chars
@@ -24,11 +24,12 @@ for a = 1:nAnimals
 end
 data = [tone_ILI, ITI_ILI, rew_ILI];
 varNames = [{'tone'}, {'ITI'}, {'reward'}];
-bar([1:3], nanmean(data))
+bar([1:3], nanmean(data),'BarWidth', 0.95)
 hold on
 plot([1:3], data, 'k')
-set(gca,'LineWidth',1,'TickDir','out', 'box', 'off', 'FontSize', 15);
+set(gca, 'FontName', 'Arial', 'TickLength', [0.04 0.04], 'LineWidth', 0.25, 'TickDir','out', 'box', 'off', 'FontSize', 20);
 xticklabels(varNames)
+xlim([0.2 3.8])
 xlabel('Epoch')
 ylabel('Probability of long ILI')
 

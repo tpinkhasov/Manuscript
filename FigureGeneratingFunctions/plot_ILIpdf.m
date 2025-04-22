@@ -22,6 +22,7 @@ xBins = NaN(length(loopBy), length(d));
 % initialize figure and colors if 'openFigure' is set as 'on'
 if contains(s.openFigure, 'on')
     colors = slanCM('cool',length(loopBy));
+    colors(end,:) = [1	0.3	0.55];
     figure()
 end
 
@@ -45,14 +46,14 @@ for f = 1:length(loopBy)
     xBins(f,:) = xi;
     %plot if 'openFigure' is 'on'
     if contains(s.openFigure, 'on')
-        plot(xi,(d), 'Color', [colors(f,:)], 'LineWidth', 2);
+        plot(xi,(d), 'Color', [colors(f,:) 0.5], 'LineWidth', 2);
         hold on
     end
 end
 
 %set plot features if 'openFigure' is 'on'
 if contains(s.openFigure, 'on')
-    set(gca,'LineWidth',1,'TickDir','out', 'box', 'off', 'FontSize', 15);
+    set(gca, 'FontName', 'Arial', 'TickLength', [0.04 0.04], 'LineWidth', 0.25, 'TickDir','out', 'box', 'off', 'FontSize', 20);
     xlabel('Time (s)')
     ylabel('Probability density')
     %set legend

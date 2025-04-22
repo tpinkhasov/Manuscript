@@ -46,7 +46,7 @@ end
 load("C:\Users\Kepecs\MATLAB\Projects\DAManuscript\FigureGeneratingFunctions\BarPlotColors.mat")
 
 fig = figure();
-barFigData = bar(nanmean(allBeh), 'EdgeColor', 'none', 'FaceColor', 'flat', 'FaceAlpha', 0.8, 'BarWidth', 1);
+barFigData = bar(nanmean(allBeh), 'EdgeColor', 'k', 'FaceColor', 'flat', 'FaceAlpha', 0.8, 'BarWidth', 1);
 hold on
 lineFigData = plot(allBeh', 'k', 'LineWidth', 0.5, 'Color', [0 0 0 0.45]);
 
@@ -67,7 +67,7 @@ ylabel(s.behVar)
 
 xlim([0.35 3.65])
 set(gca, 'FontName', 'Arial', 'TickLength', [0.04 0.04], 'LineWidth', 0.25, 'TickDir','out', 'box', 'off', 'FontSize', 20);
-daspect([1 3.5 1])
+%daspect([1 3.5 1])
 
 %Statistics
 dataTable = table(linePer,allBeh(:,1), allBeh(:,2), allBeh(:,3));
